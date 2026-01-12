@@ -1,0 +1,2 @@
+# This directory holds the SQLite database (app.db)
+# The database is created automatically on first server request
