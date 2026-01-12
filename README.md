@@ -44,6 +44,40 @@ CREATE TABLE items (
 )
 ```
 
+## Toast Notifications
+
+The app includes a lightweight toast notification system built with React Context. Toasts appear in the bottom-right corner and auto-dismiss after 3 seconds.
+
+### Usage
+
+Import and use the `useToast` hook in any client component:
+
+```tsx
+import { useToast } from '@/components/ToastContext'
+
+function MyComponent() {
+  const { addToast } = useToast()
+
+  const handleAction = () => {
+    addToast('Action completed', 'success')
+  }
+
+  return <button onClick={handleAction}>Do something</button>
+}
+```
+
+### Toast Types
+
+- `success` - Green, for successful operations
+- `error` - Red, for errors and failures
+- `info` - Blue, for informational messages
+
+### Components
+
+- `ToastContext.tsx` - Context provider and `useToast` hook
+- `Toast.tsx` - Toast container and individual toast rendering
+- `Providers.tsx` - Client-side provider wrapper
+
 ## Project Structure
 
 ```
@@ -53,6 +87,11 @@ CREATE TABLE items (
 │   │   ├── globals.css     # Tailwind imports
 │   │   ├── layout.tsx      # Root layout
 │   │   └── page.tsx        # Home page (UI)
+│   ├── components/
+│   │   ├── Providers.tsx   # Client providers wrapper
+│   │   ├── ShootingStars.tsx # Background animation
+│   │   ├── Toast.tsx       # Toast UI component
+│   │   └── ToastContext.tsx # Toast state management
 │   └── lib/
 │       └── db.ts           # SQLite database functions
 ├── data/

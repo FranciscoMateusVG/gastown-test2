@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useToast } from '@/components/ToastContext'
 
 interface Item {
   id: number
@@ -14,8 +15,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [deletingId, setDeletingId] = useState<number | null>(null)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+  const { addToast } = useToast()
 
   const fetchItems = async () => {
     try {
@@ -23,7 +23,7 @@ export default function Home() {
       const data = await res.json()
       setItems(data)
     } catch {
-      setError('Failed to fetch items')
+      addToast('Failed to fetch items', 'error')
     } finally {
       setLoading(false)
     }
@@ -33,19 +33,11 @@ export default function Home() {
     fetchItems()
   }, [])
 
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => setSuccess(''), 2000)
-      return () => clearTimeout(timer)
-    }
-  }, [success])
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newItemName.trim() || submitting) return
 
     setSubmitting(true)
-    setError('')
 
     try {
       const res = await fetch('/api/items', {
@@ -56,13 +48,13 @@ export default function Home() {
 
       if (res.ok) {
         setNewItemName('')
-        setSuccess('Item created')
+        addToast('Item created', 'success')
         fetchItems()
       } else {
-        setError('Failed to create item')
+        addToast('Failed to create item', 'error')
       }
     } catch {
-      setError('Failed to create item')
+      addToast('Failed to create item', 'error')
     } finally {
       setSubmitting(false)
     }
@@ -72,18 +64,17 @@ export default function Home() {
     if (deletingId) return
 
     setDeletingId(id)
-    setError('')
 
     try {
       const res = await fetch(`/api/items/${id}`, { method: 'DELETE' })
       if (res.ok) {
-        setSuccess('Item deleted')
+        addToast('Item deleted', 'success')
         fetchItems()
       } else {
-        setError('Failed to delete item')
+        addToast('Failed to delete item', 'error')
       }
     } catch {
-      setError('Failed to delete item')
+      addToast('Failed to delete item', 'error')
     } finally {
       setDeletingId(null)
     }
@@ -103,37 +94,6 @@ export default function Home() {
               Manage your collection
             </p>
           </header>
-
-          {/* Error Alert */}
-          {error && (
-            <div className="mb-6 flex items-center justify-between gap-3 rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3">
-              <div className="flex items-center gap-2">
-                <svg className="h-4 w-4 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span className="text-sm text-red-300">{error}</span>
-              </div>
-              <button
-                onClick={() => setError('')}
-                className="text-red-400 hover:text-red-300 transition-colors"
-                aria-label="Dismiss error"
-              >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          )}
-
-          {/* Success Alert */}
-          {success && (
-            <div className="mb-6 flex items-center gap-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 px-4 py-3">
-              <svg className="h-4 w-4 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-              <span className="text-sm text-emerald-300">{success}</span>
-            </div>
-          )}
 
           {/* Add Form */}
           <form onSubmit={handleSubmit} className="mb-8">

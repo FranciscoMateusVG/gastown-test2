@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import ShootingStars from '@/components/ShootingStars'
+import { Providers } from '@/components/Providers'
 
 export const metadata: Metadata = {
   title: 'Items',
@@ -15,10 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen text-slate-100 overflow-x-hidden">
-        <ShootingStars />
-        <div className="relative z-10 min-h-screen">
-          {children}
-        </div>
+        <Providers>
+          <ShootingStars />
+          <div className="relative z-10 min-h-screen">
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   )
