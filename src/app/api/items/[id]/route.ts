@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getItemById, deleteItem } from '@/lib/db'
+import { getCurrentUser } from '@/lib/auth'
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const user = await getCurrentUser()
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const id = parseInt(params.id, 10)
 
   if (isNaN(id)) {
@@ -30,6 +36,11 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const user = await getCurrentUser()
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const id = parseInt(params.id, 10)
 
   if (isNaN(id)) {

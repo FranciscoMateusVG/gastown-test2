@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useToast } from '@/components/ToastContext'
 
 interface Item {
@@ -23,13 +24,34 @@ function ItemSkeleton() {
 }
 
 export default function Home() {
+  const router = useRouter()
   const [items, setItems] = useState<Item[]>([])
   const [newItemName, setNewItemName] = useState('')
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [fetchError, setFetchError] = useState(false)
+  const [loggingOut, setLoggingOut] = useState(false)
   const { addToast } = useToast()
+
+  const handleLogout = async () => {
+    if (loggingOut) return
+    setLoggingOut(true)
+
+    try {
+      const res = await fetch('/api/auth/logout', { method: 'POST' })
+      if (res.ok) {
+        router.push('/auth')
+        router.refresh()
+      } else {
+        addToast('Failed to logout', 'error')
+      }
+    } catch {
+      addToast('Failed to logout', 'error')
+    } finally {
+      setLoggingOut(false)
+    }
+  }
 
   const fetchItems = async () => {
     setFetchError(false)
@@ -105,13 +127,29 @@ export default function Home() {
         {/* Main Card */}
         <div className="glass-card rounded-2xl p-6 sm:p-8 shadow-2xl shadow-black/20">
           {/* Header */}
-          <header className="mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
-              Items
-            </h1>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-              Manage your collection
-            </p>
+          <header className="mb-6 sm:mb-8 flex items-start justify-between">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                Items
+              </h1>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                Manage your collection
+              </p>
+            </div>
+            <button
+              onClick={handleLogout}
+              disabled={loggingOut}
+              className="rounded-lg px-3 py-1.5 text-sm text-slate-500 dark:text-slate-400 transition-all hover:bg-slate-200/50 dark:hover:bg-slate-700/50 hover:text-slate-700 dark:hover:text-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-500/50 disabled:opacity-50"
+            >
+              {loggingOut ? (
+                <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+              ) : (
+                'Logout'
+              )}
+            </button>
           </header>
 
           {/* Add Form */}

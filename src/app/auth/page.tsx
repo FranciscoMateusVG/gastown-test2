@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function AuthPage() {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -37,18 +38,33 @@ export default function AuthPage() {
     if (!validateForm()) return
 
     setIsLoading(true)
-    // Simulate API call (UI only)
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsLoading(false)
-    setError('Authentication not implemented (UI demo only)')
+
+    try {
+      const endpoint = mode === 'login' ? '/api/auth/login' : '/api/auth/register'
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setError(data.error || 'Authentication failed')
+        return
+      }
+
+      router.push('/')
+      router.refresh()
+    } catch {
+      setError('Something went wrong. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleGoogleSignIn = async () => {
-    setError('')
-    setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setIsLoading(false)
-    setError('Google sign-in not implemented (UI demo only)')
+    setError('Google sign-in is not available. Please use email.')
   }
 
   return (
@@ -58,10 +74,10 @@ export default function AuthPage() {
         <div className="glass-card rounded-2xl p-8 shadow-2xl shadow-black/20">
           {/* Header */}
           <header className="text-center mb-8">
-            <h1 className="text-3xl font-semibold tracking-tight text-white mb-2">
+            <h1 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white mb-2">
               {mode === 'login' ? 'Welcome back' : 'Create account'}
             </h1>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               {mode === 'login'
                 ? 'Sign in to continue to your account'
                 : 'Get started with your free account'}
@@ -118,10 +134,10 @@ export default function AuthPage() {
           {/* Divider */}
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-700/50"></div>
+              <div className="w-full border-t border-slate-300/50 dark:border-slate-700/50"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-slate-900/50 text-slate-500">
+              <span className="px-4 bg-white/50 dark:bg-slate-900/50 text-slate-500">
                 or continue with email
               </span>
             </div>
@@ -132,7 +148,7 @@ export default function AuthPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-slate-300 mb-2"
+                className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
               >
                 Email
               </label>
@@ -143,14 +159,14 @@ export default function AuthPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 disabled={isLoading}
-                className="w-full rounded-lg bg-slate-800/50 border border-slate-700/50 px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-colors disabled:opacity-50"
+                className="w-full rounded-lg bg-slate-100/50 dark:bg-slate-800/50 border border-slate-300/50 dark:border-slate-700/50 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-colors disabled:opacity-50"
               />
             </div>
 
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-slate-300 mb-2"
+                className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
               >
                 Password
               </label>
@@ -161,7 +177,7 @@ export default function AuthPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 disabled={isLoading}
-                className="w-full rounded-lg bg-slate-800/50 border border-slate-700/50 px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-colors disabled:opacity-50"
+                className="w-full rounded-lg bg-slate-100/50 dark:bg-slate-800/50 border border-slate-300/50 dark:border-slate-700/50 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-colors disabled:opacity-50"
               />
             </div>
 
@@ -212,7 +228,7 @@ export default function AuthPage() {
 
           {/* Footer */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               {mode === 'login' ? (
                 <>
                   Don&apos;t have an account?{' '}
@@ -243,15 +259,6 @@ export default function AuthPage() {
             </p>
           </div>
 
-          {/* Back to app link */}
-          <div className="mt-4 text-center">
-            <Link
-              href="/"
-              className="text-sm text-slate-500 hover:text-slate-400 transition-colors"
-            >
-              ← Back to app
-            </Link>
-          </div>
         </div>
       </div>
     </main>
