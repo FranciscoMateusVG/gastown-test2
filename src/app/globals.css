@@ -9,7 +9,7 @@
   }
 }
 
-/* Shooting star animation */
+/* Shooting star animation - Dark mode */
 .shooting-star {
   position: absolute;
   background: linear-gradient(
@@ -42,6 +42,39 @@
   );
 }
 
+/* Shooting star animation - Light mode */
+.shooting-star-light {
+  position: absolute;
+  background: linear-gradient(
+    -45deg,
+    rgba(99, 102, 241, 0.7) 0%,
+    rgba(99, 102, 241, 0.4) 30%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  box-shadow:
+    0 0 6px 1px rgba(99, 102, 241, 0.3),
+    0 0 12px 2px rgba(147, 197, 253, 0.2);
+  animation: shoot linear infinite;
+  opacity: 0;
+}
+
+.shooting-star-light::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.5) 0%,
+    rgba(99, 102, 241, 0.2) 30%,
+    transparent 100%
+  );
+}
+
 @keyframes shoot {
   0% {
     transform: translate(0, 0) rotate(-45deg);
@@ -63,11 +96,17 @@
   }
 }
 
-/* Glassmorphism card */
+/* Glassmorphism card - Light mode */
 .glass-card {
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Glassmorphism card - Dark mode */
+:is(.dark .glass-card) {
+  background: rgba(15, 23, 42, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -77,6 +116,11 @@
 }
 
 .glass-card-interactive:hover {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+:is(.dark .glass-card-interactive):hover {
   background: rgba(15, 23, 42, 0.8);
   border-color: rgba(255, 255, 255, 0.12);
 }
@@ -88,12 +132,14 @@
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .shooting-star {
+  .shooting-star,
+  .shooting-star-light {
     animation: none;
     opacity: 0.2;
   }
 
-  .shooting-star::after {
+  .shooting-star::after,
+  .shooting-star-light::after {
     display: none;
   }
 }

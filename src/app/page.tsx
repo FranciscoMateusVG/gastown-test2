@@ -12,12 +12,12 @@ interface Item {
 // Skeleton component for loading state
 function ItemSkeleton() {
   return (
-    <div className="flex items-center justify-between rounded-xl bg-slate-800/30 border border-slate-700/30 px-4 py-3 animate-pulse">
+    <div className="flex items-center justify-between rounded-xl bg-slate-200/30 dark:bg-slate-800/30 border border-slate-300/30 dark:border-slate-700/30 px-4 py-3 animate-pulse">
       <div className="flex items-center gap-3 flex-1">
-        <div className="h-4 bg-slate-700/50 rounded w-3/4"></div>
-        <div className="h-3 bg-slate-700/30 rounded w-8"></div>
+        <div className="h-4 bg-slate-300/50 dark:bg-slate-700/50 rounded w-3/4"></div>
+        <div className="h-3 bg-slate-300/30 dark:bg-slate-700/30 rounded w-8"></div>
       </div>
-      <div className="h-6 bg-slate-700/30 rounded w-14"></div>
+      <div className="h-6 bg-slate-300/30 dark:bg-slate-700/30 rounded w-14"></div>
     </div>
   )
 }
@@ -106,10 +106,10 @@ export default function Home() {
         <div className="glass-card rounded-2xl p-6 sm:p-8 shadow-2xl shadow-black/20">
           {/* Header */}
           <header className="mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
+            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
               Items
             </h1>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
               Manage your collection
             </p>
           </header>
@@ -123,7 +123,7 @@ export default function Home() {
                 onChange={(e) => setNewItemName(e.target.value)}
                 placeholder="What needs to be added?"
                 disabled={submitting}
-                className="flex-1 rounded-lg bg-slate-800/50 border border-slate-700/50 px-4 py-3 text-white placeholder-slate-500 input-focus transition-colors disabled:opacity-50"
+                className="flex-1 rounded-lg bg-slate-100/50 dark:bg-slate-800/50 border border-slate-300/50 dark:border-slate-700/50 px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 input-focus transition-colors disabled:opacity-50"
               />
               <button
                 type="submit"
@@ -159,11 +159,11 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
                 </div>
-                <p className="text-slate-300 font-medium mb-1">Something went wrong</p>
+                <p className="text-slate-700 dark:text-slate-300 font-medium mb-1">Something went wrong</p>
                 <p className="text-sm text-slate-500 mb-4">We couldn&apos;t load your items</p>
                 <button
                   onClick={fetchItems}
-                  className="rounded-lg bg-slate-700/50 border border-slate-600/50 px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:bg-slate-700 hover:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500/50"
+                  className="rounded-lg bg-slate-200/50 dark:bg-slate-700/50 border border-slate-300/50 dark:border-slate-600/50 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 transition-all hover:bg-slate-300/50 dark:hover:bg-slate-700 hover:border-slate-400/50 dark:hover:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-500/50"
                 >
                   Try again
                 </button>
@@ -173,13 +173,13 @@ export default function Home() {
               <div className="flex flex-col items-center justify-center py-10 sm:py-12 text-center">
                 <div className="relative mb-4">
                   <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl"></div>
-                  <div className="relative rounded-full bg-gradient-to-br from-slate-800 to-slate-800/50 p-5 border border-slate-700/50">
-                    <svg className="h-10 w-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="relative rounded-full bg-gradient-to-br from-slate-200 dark:from-slate-800 to-slate-200/50 dark:to-slate-800/50 p-5 border border-slate-300/50 dark:border-slate-700/50">
+                    <svg className="h-10 w-10 text-slate-400 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                     </svg>
                   </div>
                 </div>
-                <h3 className="text-lg font-medium text-slate-200 mb-1">Your collection is empty</h3>
+                <h3 className="text-lg font-medium text-slate-700 dark:text-slate-200 mb-1">Your collection is empty</h3>
                 <p className="text-sm text-slate-500 max-w-xs">
                   Start by adding your first item using the form above
                 </p>
@@ -190,16 +190,16 @@ export default function Home() {
                 {items.map((item) => (
                   <li
                     key={item.id}
-                    className="group flex items-center justify-between rounded-xl bg-slate-800/30 border border-slate-700/30 px-3 sm:px-4 py-3 glass-card-interactive"
+                    className="group flex items-center justify-between rounded-xl bg-slate-100/30 dark:bg-slate-800/30 border border-slate-300/30 dark:border-slate-700/30 px-3 sm:px-4 py-3 glass-card-interactive"
                   >
                     <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                      <span className="text-white truncate text-sm sm:text-base">{item.name}</span>
-                      <span className="text-xs text-slate-500 font-mono flex-shrink-0">#{item.id}</span>
+                      <span className="text-slate-900 dark:text-white truncate text-sm sm:text-base">{item.name}</span>
+                      <span className="text-xs text-slate-400 dark:text-slate-500 font-mono flex-shrink-0">#{item.id}</span>
                     </div>
                     <button
                       onClick={() => handleDelete(item.id)}
                       disabled={deletingId === item.id}
-                      className="ml-2 sm:ml-3 rounded-lg px-2 sm:px-3 py-1.5 text-sm text-slate-400 transition-all hover:bg-red-500/10 hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 disabled:opacity-50 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100"
+                      className="ml-2 sm:ml-3 rounded-lg px-2 sm:px-3 py-1.5 text-sm text-slate-500 dark:text-slate-400 transition-all hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400 focus:outline-none focus:ring-2 focus:ring-red-500/50 disabled:opacity-50 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100"
                       aria-label={`Delete ${item.name}`}
                     >
                       {deletingId === item.id ? (
@@ -219,7 +219,7 @@ export default function Home() {
 
           {/* Footer */}
           {!loading && !fetchError && items.length > 0 && (
-            <div className="mt-6 pt-4 border-t border-slate-700/30">
+            <div className="mt-6 pt-4 border-t border-slate-300/30 dark:border-slate-700/30">
               <p className="text-xs text-slate-500 text-center">
                 {items.length} {items.length === 1 ? 'item' : 'items'}
               </p>
