@@ -27,6 +27,11 @@ next-env.d.ts
 
 # SQLite database (tracked in repo)
 # data/app.db is intentionally tracked
+data/test.db
+
+# Playwright
+test-results/
+playwright-report/
 
 # Gas Town (local state)
 .beads/
