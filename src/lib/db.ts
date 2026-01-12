@@ -3,7 +3,8 @@ import path from 'path'
 import fs from 'fs'
 
 const DATA_DIR = path.join(process.cwd(), 'data')
-const DB_PATH = path.join(DATA_DIR, 'app.db')
+const DB_FILE = process.env.TEST_DB ? 'test.db' : 'app.db'
+const DB_PATH = path.join(DATA_DIR, DB_FILE)
 
 // Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
@@ -100,7 +101,7 @@ export function createSession(userId: number, token: string, expiresAt: Date): S
 }
 
 export function getSessionByToken(token: string): Session | undefined {
-  return db.prepare('SELECT * FROM sessions WHERE token = ? AND expires_at > datetime("now")').get(token) as Session | undefined
+  return db.prepare("SELECT * FROM sessions WHERE token = ? AND expires_at > datetime('now')").get(token) as Session | undefined
 }
 
 export function deleteSession(token: string): boolean {
@@ -109,6 +110,6 @@ export function deleteSession(token: string): boolean {
 }
 
 export function cleanExpiredSessions(): number {
-  const result = db.prepare('DELETE FROM sessions WHERE expires_at <= datetime("now")').run()
+  const result = db.prepare("DELETE FROM sessions WHERE expires_at <= datetime('now')").run()
   return result.changes
 }

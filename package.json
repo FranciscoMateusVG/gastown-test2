@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -16,6 +17,7 @@
     "react-dom": "^18.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@types/bcrypt": "^6.0.0",
     "@types/better-sqlite3": "^7.6.0",
     "@types/node": "^20.0.0",
