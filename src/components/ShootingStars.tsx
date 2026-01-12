@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useTheme } from './ThemeProvider'
 
 interface Star {
   id: number
@@ -14,6 +15,7 @@ interface Star {
 export default function ShootingStars() {
   const [stars, setStars] = useState<Star[]>([])
   const [reducedMotion, setReducedMotion] = useState(false)
+  const { theme } = useTheme()
 
   useEffect(() => {
     // Check for reduced motion preference
@@ -37,15 +39,23 @@ export default function ShootingStars() {
     return () => mediaQuery.removeEventListener('change', handler)
   }, [])
 
+  const isDark = theme === 'dark'
+
   if (reducedMotion) {
     // Static subtle dots for reduced motion
     return (
       <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950" />
+        <div className={`absolute inset-0 transition-colors duration-300 ${
+          isDark
+            ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950'
+            : 'bg-gradient-to-br from-sky-100 via-blue-50 to-indigo-100'
+        }`} />
         {stars.slice(0, 6).map((star) => (
           <div
             key={star.id}
-            className="absolute rounded-full bg-white/20"
+            className={`absolute rounded-full transition-colors duration-300 ${
+              isDark ? 'bg-white/20' : 'bg-indigo-400/30'
+            }`}
             style={{
               top: `${star.top}%`,
               left: `${star.left}%`,
@@ -61,16 +71,22 @@ export default function ShootingStars() {
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950" />
+      <div className={`absolute inset-0 transition-colors duration-300 ${
+        isDark
+          ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950'
+          : 'bg-gradient-to-br from-sky-100 via-blue-50 to-indigo-100'
+      }`} />
 
       {/* Subtle radial glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-indigo-500/5 rounded-full blur-3xl" />
+      <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full blur-3xl transition-colors duration-300 ${
+        isDark ? 'bg-indigo-500/5' : 'bg-indigo-300/20'
+      }`} />
 
       {/* Shooting stars */}
       {stars.map((star) => (
         <div
           key={star.id}
-          className="shooting-star absolute"
+          className={`absolute ${isDark ? 'shooting-star' : 'shooting-star-light'}`}
           style={{
             top: `${star.top}%`,
             left: `${star.left}%`,
